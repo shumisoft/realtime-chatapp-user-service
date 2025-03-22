@@ -5,12 +5,14 @@ import java.util.UUID;
 import com.dipanshushukla.realtimechatappuserservice.entity.User;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserDTO {
     private UUID userId;
 
