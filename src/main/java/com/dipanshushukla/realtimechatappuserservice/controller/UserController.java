@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dipanshushukla.realtimechatappuserservice.dto.UserDTO;
+import com.dipanshushukla.realtimechatappuserservice.dto.UsernameExistsResponseDTO;
 import com.dipanshushukla.realtimechatappuserservice.service.UserService;
+
+import jakarta.validation.constraints.NotBlank;
 
 @RestController
 public class UserController {
@@ -38,7 +41,14 @@ public class UserController {
 
     @GetMapping("/lookup")
     public ResponseEntity<UserDTO> getUserByUsername(
-            @RequestParam String username) {
+            @RequestParam @NotBlank(message = "Username must not be empty or null") String username) {
         return ResponseEntity.ok(service.getUserByUsername(username));
     }
+
+    @GetMapping("/exists")
+    public ResponseEntity<UsernameExistsResponseDTO> existByUsername(
+            @RequestParam @NotBlank(message = "Username must not be empty or null") String username) {
+        return ResponseEntity.ok(service.existsByUsername(username));
+    }
+
 }

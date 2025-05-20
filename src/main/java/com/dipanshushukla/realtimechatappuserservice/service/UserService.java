@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dipanshushukla.realtimechatappuserservice.dto.UserDTO;
+import com.dipanshushukla.realtimechatappuserservice.dto.UsernameExistsResponseDTO;
 import com.dipanshushukla.realtimechatappuserservice.entity.User;
 import com.dipanshushukla.realtimechatappuserservice.exception.InvalidUserUpdateException;
 import com.dipanshushukla.realtimechatappuserservice.exception.UserNotFoundException;
@@ -59,5 +60,9 @@ public class UserService {
         User user = repository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("No user found with id: " + userId));
         repository.delete(user);
+    }
+
+    public UsernameExistsResponseDTO existsByUsername(String username) {
+        return UsernameExistsResponseDTO.builder().exists(repository.existsByUsername(username)).build();
     }
 }
