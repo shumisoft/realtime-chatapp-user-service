@@ -3,9 +3,13 @@ package com.dipanshushukla.realtimechatappuserservice.service;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dipanshushukla.realtimechatappuserservice.dto.UserDTO;
+import com.dipanshushukla.realtimechatappuserservice.dto.UserSearchResponseDTO;
 import com.dipanshushukla.realtimechatappuserservice.dto.UsernameExistsResponseDTO;
 import com.dipanshushukla.realtimechatappuserservice.entity.User;
 import com.dipanshushukla.realtimechatappuserservice.exception.InvalidUserUpdateException;
@@ -66,4 +70,22 @@ public class UserService {
     public UsernameExistsResponseDTO existsByUsername(String username) {
         return UsernameExistsResponseDTO.builder().exists(repository.existsByUsername(username)).build();
     }
+
+    public Page<UserSearchResponseDTO> searchUsers(
+            String query,
+            UUID currentUserId,
+            int page,
+            int size) {
+
+        if (query == null || query.trim().isEmpty()) {
+            throw new IllegalArgumentException("Search query must not be empty");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<User> users = repository.searchUsers(query.trim(), currentUserId, pageable);
+
+        return users.map(UserSearchResponseDTO::fromEntity);
+    }
+
 }

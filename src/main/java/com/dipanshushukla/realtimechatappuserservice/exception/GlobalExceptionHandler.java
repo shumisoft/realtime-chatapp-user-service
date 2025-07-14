@@ -86,6 +86,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(buildBody(HttpStatus.CONFLICT, message), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
+        log.warn("Validation failed: {}", ex.getMessage());
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleDefault(Exception ex) {
         log.error("Unexpected error:", ex);
