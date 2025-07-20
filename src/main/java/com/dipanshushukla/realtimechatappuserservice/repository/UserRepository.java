@@ -16,8 +16,6 @@ import com.dipanshushukla.realtimechatappuserservice.entity.User;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
 
-    Boolean existsByUsername(String username);
-
     @Query("""
                 SELECT u FROM User u
                 WHERE u.userId <> :currentUserId

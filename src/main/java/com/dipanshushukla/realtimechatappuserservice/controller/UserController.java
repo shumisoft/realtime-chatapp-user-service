@@ -46,13 +46,6 @@ public class UserController {
         return ResponseEntity.ok(service.getUserByUsername(username));
     }
 
-    // TODO Move to auth
-    @GetMapping("/exists")
-    public ResponseEntity<UsernameExistsResponseDTO> existByUsername(
-            @RequestParam @NotBlank(message = "Username must not be empty or null") String username) {
-        return ResponseEntity.ok(service.existsByUsername(username));
-    }
-
     @GetMapping("/search")
     public ResponseEntity<Page<UserSearchResponseDTO>> searchUsers(
             @RequestHeader("X-User-Id") UUID currentUserId,

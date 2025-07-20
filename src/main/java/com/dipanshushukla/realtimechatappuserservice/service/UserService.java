@@ -66,11 +66,6 @@ public class UserService {
         repository.delete(user);
     }
 
-    // TODO Move to auth later
-    public UsernameExistsResponseDTO existsByUsername(String username) {
-        return UsernameExistsResponseDTO.builder().exists(repository.existsByUsername(username)).build();
-    }
-
     public Page<UserSearchResponseDTO> searchUsers(
             String query,
             UUID currentUserId,
