@@ -1,4 +1,4 @@
-package com.dipanshushukla.realtimechatappuserservice.exception;
+package com.dipanshushukla.realtimechatappuserservice.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,6 +9,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.dipanshushukla.realtimechatappuserservice.exception.InvalidUserUpdateException;
+import com.dipanshushukla.realtimechatappuserservice.exception.UserNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

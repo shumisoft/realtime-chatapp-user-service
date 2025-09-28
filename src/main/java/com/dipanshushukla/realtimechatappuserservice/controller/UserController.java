@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dipanshushukla.realtimechatappuserservice.dto.UserDTO;
 import com.dipanshushukla.realtimechatappuserservice.dto.UserSearchResponseDTO;
-import com.dipanshushukla.realtimechatappuserservice.dto.UsernameExistsResponseDTO;
 import com.dipanshushukla.realtimechatappuserservice.service.UserService;
 
 import jakarta.validation.constraints.NotBlank;
