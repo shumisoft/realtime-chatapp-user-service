@@ -1,21 +1,25 @@
 package com.dipanshushukla.realtimechatappuserservice.exception.handler;
 
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import com.dipanshushukla.realtimechatappuserservice.exception.InvalidUserUpdateException;
 import com.dipanshushukla.realtimechatappuserservice.exception.UserNotFoundException;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -99,6 +103,43 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<Object> missingRequestHeaderExceptionHandler(MissingRequestHeaderException ex) {
+
+        log.warn("Missing request header: {}", ex.getHeaderName());
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+
+        log.warn("Method validation error: {}", ex.getMessage());
+
+        String message = Stream.concat(ex.getValueResults().stream(), ex.getBeanResults().stream())
+                .findFirst()
+                .flatMap(validationResult -> validationResult
+                        .getResolvableErrors()
+                        .stream()
+                        .findFirst())
+                .map(MessageSourceResolvable::getDefaultMessage)
+                .orElse("Validation failed for request parameter.");
+
+        Map<String, Object> body = Map.of(
+                "status", HttpStatus.BAD_REQUEST.value(),
+                "timestamp", LocalDateTime.now(),
+                "message", message);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+
     }
 
     @ExceptionHandler(Exception.class)
