@@ -22,10 +22,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
+    private static final String USER_NOT_FOUND_WITH_ID_MESSAGE = "No user found with id: ";
+
     @Override
     public UserDTO getUserById(UUID userId) {
         User user = repository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("No user found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_WITH_ID_MESSAGE + userId));
         return UserDTO.fromEntity(user);
     }
 
@@ -49,7 +51,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = repository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("No user found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_WITH_ID_MESSAGE + userId));
 
         if (userDTO.getEmail() != null)
             user.setEmail(userDTO.getEmail());
@@ -66,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(UUID userId) {
         User user = repository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("No user found with id: " + userId));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_WITH_ID_MESSAGE + userId));
         repository.delete(user);
     }
 
