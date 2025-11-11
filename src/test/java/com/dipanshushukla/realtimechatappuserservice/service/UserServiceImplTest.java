@@ -35,7 +35,7 @@ import com.dipanshushukla.realtimechatappuserservice.repository.UserRepository;
 import com.dipanshushukla.realtimechatappuserservice.service.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
   @Mock
   private UserRepository repository;
@@ -61,8 +61,8 @@ public class UserServiceImplTest {
     UserDTO result = service.getUserById(UserDataFactory.DEFAULT_USER_ID);
 
     // Assert
-    assertEquals(result.getUsername(), UserDataFactory.DEFAULT_USERNAME);
-    assertEquals(result.getEmail(), UserDataFactory.DEFAULT_EMAIL);
+    assertEquals(UserDataFactory.DEFAULT_USERNAME, result.getUsername());
+    assertEquals(UserDataFactory.DEFAULT_EMAIL, result.getEmail());
 
   }
 
@@ -84,7 +84,7 @@ public class UserServiceImplTest {
 
     UserDTO result = service.getUserByUsername(UserDataFactory.DEFAULT_USERNAME);
 
-    assertEquals(result.getUserId(), UserDataFactory.DEFAULT_USER_ID);
+    assertEquals(UserDataFactory.DEFAULT_USER_ID, result.getUserId());
 
   }
 
@@ -119,10 +119,10 @@ public class UserServiceImplTest {
     UserDTO result = service.updateUserById(UserDataFactory.DEFAULT_USER_ID, updatePayload);
 
     // Assert
-    assertEquals(result.getBio(), UPDATED_BIO);
-    assertEquals(result.getFullName(), UPDATED_FULL_NAME);
-    assertEquals(result.getEmail(), UserDataFactory.DEFAULT_EMAIL);
-    assertEquals(result.getUsername(), UserDataFactory.DEFAULT_USERNAME);
+    assertEquals(UPDATED_BIO, result.getBio());
+    assertEquals(UPDATED_FULL_NAME, result.getFullName());
+    assertEquals(UserDataFactory.DEFAULT_EMAIL, result.getEmail());
+    assertEquals(UserDataFactory.DEFAULT_USERNAME, result.getUsername());
 
     verify(repository).save(any(User.class));
 
@@ -170,11 +170,11 @@ public class UserServiceImplTest {
     Page<UserSearchResponseDTO> result = service.searchUsers("test", currentUserId, 0, 10);
 
     // Assert
-    assertEquals(result.getTotalElements(), 1);
-    assertEquals(result.getContent().get(0).getUsername(), UserDataFactory.DEFAULT_USERNAME);
+    assertEquals(1, result.getTotalElements());
+    assertEquals(UserDataFactory.DEFAULT_USERNAME, result.getContent().get(0).getUsername());
 
     // Verify page request was constructed correctly
-    verify(repository).searchUsers(eq("test"), eq(currentUserId), eq(PageRequest.of(0, 10)));
+    verify(repository).searchUsers("test", currentUserId, PageRequest.of(0, 10));
 
   }
 
@@ -182,8 +182,10 @@ public class UserServiceImplTest {
   @DisplayName("Should throw IllegalArgumentException on empty query")
   void searchUsers_EmptyQuery_ThrowsException() {
 
+    UUID userId = UUID.randomUUID();
+
     assertThrows(IllegalArgumentException.class,
-        () -> service.searchUsers("   ", UUID.randomUUID(), 0, 10));
+        () -> service.searchUsers("   ", userId, 0, 10));
 
     verify(repository, never()).searchUsers(anyString(), any(), any());
 

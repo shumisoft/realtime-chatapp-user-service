@@ -37,7 +37,7 @@ import com.dipanshushukla.realtimechatappuserservice.service.UserService;
 import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+class UserControllerTest {
 
 	private MockMvc mockMvc;
 	private final ObjectMapper objectMapper = new ObjectMapper();
