@@ -49,9 +49,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleValidation(MethodArgumentNotValidException ex) {
         log.warn("Validation failed: {}", ex.getMessage());
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
+        Map<String, Object> body = buildBody(HttpStatus.BAD_REQUEST, "Validation failed");
 
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors()
@@ -97,12 +95,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
         log.warn("Validation failed: {}", ex.getMessage());
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("message", ex.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(buildBody(HttpStatus.BAD_REQUEST, ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
@@ -110,12 +103,7 @@ public class GlobalExceptionHandler {
 
         log.warn("Missing request header: {}", ex.getHeaderName());
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("message", ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildBody(HttpStatus.BAD_REQUEST, ex.getMessage()));
 
     }
 
@@ -133,12 +121,7 @@ public class GlobalExceptionHandler {
                 .map(MessageSourceResolvable::getDefaultMessage)
                 .orElse("Validation failed for request parameter.");
 
-        Map<String, Object> body = Map.of(
-                "status", HttpStatus.BAD_REQUEST.value(),
-                "timestamp", LocalDateTime.now(),
-                "message", message);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildBody(HttpStatus.BAD_REQUEST, message));
 
     }
 
