@@ -2,51 +2,40 @@ package com.dipanshushukla.realtimechatappuserservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.dipanshushukla.realtimechatappuserservice.dto.UserDTO;
 import com.dipanshushukla.realtimechatappuserservice.service.UserService;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-
-
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService service;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID userId) {
         UserDTO userDTO = service.getUserById(userId);
         return ResponseEntity.ok(userDTO);
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<String> updateUserById(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
+    @PatchMapping("/{userId}")
+    public ResponseEntity<String> updateUserById(@PathVariable UUID userId,
+            @RequestBody UserDTO userDTO) {
         service.updateUserById(userId, userDTO);
-        return ResponseEntity.ok().body("User updated successfully.");
+        return ResponseEntity.ok("User updated successfully.");
     }
-    
+
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteById(@PathVariable Long userId){
+    public ResponseEntity<String> deleteById(@PathVariable UUID userId) {
         service.deleteById(userId);
-        return ResponseEntity.ok().body("User deleted Successfully.");
+        return ResponseEntity.ok("User deleted successfully.");
     }
-    
+
     @GetMapping()
-    public ResponseEntity<UserDTO> getUserByUsername(@RequestParam(required = true) String username) {
+    public ResponseEntity<UserDTO> getUserByUsername(@RequestParam String username) {
         UserDTO userDTO = service.getUserByUsername(username);
-        return ResponseEntity.ok().body(userDTO);
+        return ResponseEntity.ok(userDTO);
     }
-    
-    
 }

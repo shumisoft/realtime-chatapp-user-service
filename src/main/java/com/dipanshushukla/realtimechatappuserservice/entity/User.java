@@ -1,22 +1,26 @@
 package com.dipanshushukla.realtimechatappuserservice.entity;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 public class User {
 
     @Id
-    private Long userId;
-    
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(nullable = false, updatable = false)
+    private UUID userId;
+
     @Column(nullable = false)
     private String username;
-    
+
     @Column(nullable = false)
     private String email;
 
