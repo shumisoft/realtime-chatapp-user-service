@@ -1,5 +1,6 @@
 package com.dipanshushukla.realtimechatappuserservice.controller;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,13 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<String> updateMyProfile(
+    public ResponseEntity<Map<String, String>> updateMyProfile(
             @RequestHeader("X-User-Id") UUID userId,
             @RequestBody UserDTO userDTO) {
 
         service.updateUserById(userId, userDTO);
-        return ResponseEntity.ok("User updated successfully.");
+        return ResponseEntity.ok(
+                Map.of("message", "User updated successfully."));
     }
 
     @GetMapping("/lookup")
@@ -45,6 +47,7 @@ public class UserController {
         return ResponseEntity.ok(service.getUserByUsername(username));
     }
 
+    // TODO Move to auth
     @GetMapping("/exists")
     public ResponseEntity<UsernameExistsResponseDTO> existByUsername(
             @RequestParam @NotBlank(message = "Username must not be empty or null") String username) {
