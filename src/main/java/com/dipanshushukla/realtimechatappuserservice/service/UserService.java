@@ -30,7 +30,7 @@ public class UserService {
         return UserDTO.fromEntity(user);
     }
 
-    public void updateUserById(UUID userId, UserDTO userDTO) {
+    public UserDTO updateUserById(UUID userId, UserDTO userDTO) {
 
         if (userDTO.getEmail() == null &&
                 userDTO.getFullName() == null &&
@@ -53,7 +53,7 @@ public class UserService {
         if (userDTO.getBio() != null)
             user.setBio(userDTO.getBio());
 
-        repository.save(user);
+        return UserDTO.fromEntity(repository.save(user));
     }
 
     public void deleteById(UUID userId) {

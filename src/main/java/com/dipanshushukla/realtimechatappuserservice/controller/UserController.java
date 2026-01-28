@@ -1,6 +1,5 @@
 package com.dipanshushukla.realtimechatappuserservice.controller;
 
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +31,11 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<Map<String, String>> updateMyProfile(
+    public ResponseEntity<UserDTO> updateMyProfile(
             @RequestHeader("X-User-Id") UUID userId,
             @RequestBody UserDTO userDTO) {
 
-        service.updateUserById(userId, userDTO);
-        return ResponseEntity.ok(
-                Map.of("message", "User updated successfully."));
+        return ResponseEntity.ok(service.updateUserById(userId, userDTO));
     }
 
     @GetMapping("/lookup")
